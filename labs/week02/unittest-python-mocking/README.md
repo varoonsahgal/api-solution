@@ -1,6 +1,6 @@
 # unittest with Mocks
 
-Build a product/ordering system API in Python using FastAPI. Include the following models within that API:
+Using the provided starting point, build a product/ordering system API in Python using FastAPI. Include the following models within that API:
 
 * Product Structure
     - Internal ID (auto-increment)
@@ -19,13 +19,13 @@ Build a product/ordering system API in Python using FastAPI. Include the followi
     - Accept a new order for a single product
     - Retrieve a specific order's details by order number
 
-Use the provided SQLite database as a starting point for persisting your catalog and order information. The starting point for the lab has sample data preloaded with a set of products.
+Use the provided SQLite database (code in the `start` folder can be used to create the database automatically) as a starting point for persisting your catalog and order information. The starting point for the lab has sample data preloaded with a set of products.
 
-The key focus of this lab is to practice the SOLID principles - i.e., build the components of your API in a loosely-coupled manner, layer components in modules correctly, etc. such that the components of your API are clean and well architected. For example, whatever storage/persistence strategy you use, the rest of the API should not need to know or care. Ensure that functionality is sufficiently isolated to modules and that each module is insulated from the others (to prevent brittle coupling).
+You'll be seeking to build the components of your API in a loosely-coupled manner, layer components in modules correctly, etc. such that the components of your API are clean and well architected. For example, whatever storage/persistence strategy you use, the rest of the API should not need to know or care. Ensure that functionality is sufficiently isolated to modules and that each module is insulated from the others (to prevent brittle coupling).
 
 ## Part 1
 
-Add unit tests (using the `unittest` library) to your existing components. Use the `unittest.mock` library to mock the components of your application so your tests remain true unit tests (isolated).
+Build the set of features outlined above using TDD and include unit tests using the `unittest` library. Use the `unittest.mock` library to mock the components of your application so your tests remain true unit tests (isolated).
 
 ## Part 2
 
@@ -35,7 +35,7 @@ Add additional operations to your API:
 * Edit an existing product
 * Delete a product
 
-In all cases, attempt to write your tests first (in TDD fashion). Practice Red/Green/Refactor as you move through the coding of this new set of operations. Ensure you use `unittest.mock` with the new operations to maintain isolation.
+As with the previous, use TDD and `unittest` to build a corresponding set of automated tests to accompany the production code. Practice Red/Green/Refactor as you move through the coding of this new set of operations. Ensure you use `unittest.mock` with the new operations to maintain isolation.
 
 ## Part 3
 
