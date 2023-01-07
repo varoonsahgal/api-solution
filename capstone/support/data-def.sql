@@ -4,23 +4,23 @@ CREATE DATABASE capstone;
 
 CREATE TABLE address (
     ID SERIAL PRIMARY KEY,
-    Address CHAR(50),
-    City CHAR(25),
-    State CHAR(25),
-    ZipCode CHAR(5)
+    Address VARCHAR(50),
+    City VARCHAR(25),
+    State VARCHAR(25),
+    ZipCode VARCHAR(5)
 );
 
 CREATE TABLE customer (
     ID SERIAL PRIMARY KEY,
-    FirstName CHAR(25),
-    LastName CHAR(25),
+    FirstName VARCHAR(25),
+    LastName VARCHAR(25),
     AddressID INT REFERENCES address(ID),
-    Email CHAR(50)
+    Email VARCHAR(50)
 );
 
 CREATE TABLE account (
     ID SERIAL PRIMARY KEY,
-    AccountNumber CHAR(10),
+    AccountNumber VARCHAR(10),
     CustomerID INT REFERENCES customer(ID),
-    CurrentBalance INT
+    CurrentBalance FLOAT
 );

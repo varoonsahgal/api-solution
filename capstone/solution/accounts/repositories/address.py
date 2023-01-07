@@ -22,31 +22,30 @@ class AddressRepository():
                 address.id = cursor.fetchone()[0]
         return address
         
-    # def get_by_id(self, id):
-    #     with psycopg.connect(self.conn_string) as db:
-    #         cursor = db.cursor()
-    #         cursor.execute('SELECT ID, ADDRESS, CITY, STATE, ZIP_CODE FROM ADDRESS WHERE ID=?;', [id])
-    #     row = cursor.fetchone()
-    #     return Address(id=row[0], address=row[1], city=row[2], state=row[3], zip_code=row[4])
+    def get_by_id(self, id) -> Address:
+        with psycopg2.connect(self.conn_string) as db:
+            with db.cursor() as cursor:
+                cursor.execute("""
+                    SELECT ID, Address, City, State, ZipCode FROM 
+                        address WHERE ID=%(address_id)s
+                    """, {
+                        'address_id': id              
+                    }
+                )
+                row = cursor.fetchone()
+        # In a larger enterprise app, you would likely be using an ORM like
+        # SQLAlchemy, which would handle the mapping of the database row to the object
+        # (and its hierarchy) automatically. The other approach you could take is to
+        # use a separate set of DTOs (Data Transfer Objects) and manage mapping between
+        # the DTO and the Pydantic model.
+        return Address.construct(id=row[0], address=row[1], city=row[2], state=row[3], zip_code=row[4])
 
-    # def get_all(self):
-    #     results = []
-    #     with psycopg.connect(self.conn_string) as db:
-    #         cursor = db.cursor()
-    #         cursor.execute('SELECT ID, ADDRESS, CITY, STATE, ZIP_CODE FROM ADDRESS;')
-    #     rows = cursor.fetchall()
-    #     for row in rows:
-    #         results.append(Address(id=row[0], address=row[1], city=row[2], state=row[3], zip_code=row[4]))
-    #     return results
-
-    # def update(self, id, address: Address):
-    #     if id != address.id:
-    #         return False
-
-    #     with psycopg.connect(self.conn_string) as db:
-    #         db.execute('UPDATE ADDRESS SET ADDRESS=?, CITY=?, STATE=?, ZIP_CODE=? \
-    #             WHERE ID=?;', [address.address, address.city, address.state, address.zip_code, id])
-
-    # def delete(self, id):
-    #     with psycopg.connect(self.conn_string) as db:
-    #         db.execute('DELETE FROM ADDRESS WHERE ID=?;', [id])
+    def delete(self, id) -> None:
+        with psycopg2.connect(self.conn_string) as db:
+            with db.cursor() as cursor:
+                cursor.execute("""
+                    DELETE FROM address WHERE ID=%(address_id)s
+                    """, {
+                        'address_id': id              
+                    }
+                )

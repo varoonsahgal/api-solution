@@ -1,10 +1,11 @@
 import psycopg2
 from accounts.models.customer import Customer
+from accounts.models.address import Address
 
 class CustomerRepository():
     conn_string = "host='localhost' dbname='capstone' user='postgres' password='password123'"
 
-    def insert(self, customer: Customer):
+    def insert(self, customer: Customer) -> Customer:
         with psycopg2.connect(self.conn_string) as db:
             with db.cursor() as cursor:
                 cursor.execute("""
@@ -22,37 +23,30 @@ class CustomerRepository():
                 customer.id = cursor.fetchone()[0]
         return customer
 
-    # def get_by_id(self, id):
-    #     with psycopg.connect(self.conn_string) as db:
-    #         cursor = db.cursor()
-    #         cursor.execute('SELECT ID, FIRST_NAME, LAST_NAME, ADDRESS_ID, EMAIL_ADDRESS FROM CUSTOMER WHERE ID=?;', [id])
-    #     row = cursor.fetchone()
-    #     address = self.address_repository.get_by_id(row[3])
-    #     return Customer(id=row[0], first_name=row[1], last_name=row[2], address=address, email_address=row[4])
+    def get_by_id(self, id) -> Customer:
+        with psycopg2.connect(self.conn_string) as db:
+            with db.cursor() as cursor:
+                cursor.execute("""
+                    SELECT ID, FirstName, LastName, AddressID, Email FROM 
+                        customer WHERE ID=%(customer_id)s
+                    """, {
+                        'customer_id': id              
+                    }
+                )
+                row = cursor.fetchone()
+        # In a larger enterprise app, you would likely be using an ORM like
+        # SQLAlchemy, which would handle the mapping of the database row to the object
+        # (and its hierarchy) automatically. The other approach you could take is to
+        # use a separate set of DTOs (Data Transfer Objects) and manage mapping between
+        # the DTO and the Pydantic model.
+        return Customer.construct(id=row[0], first_name=row[1], last_name=row[2], address=Address.construct(id=row[3]), email_address=row[4])
 
-    # def get_all(self):
-    #     results = []
-    #     with psycopg.connect(self.conn_string) as db:
-    #         cursor = db.cursor()
-    #         cursor.execute('SELECT ID, FIRST_NAME, LAST_NAME, ADDRESS_ID, EMAIL_ADDRESS FROM CUSTOMER;')
-    #     rows = cursor.fetchall()
-    #     for row in rows:
-    #         address = self.address_repository.get_by_id(row[3])
-    #         results.append(Customer(id=row[0], first_name=row[1], last_name=row[2], address=address, email_address=row[4]))
-    #     return results
-
-    # def update(self, id, customer: Customer):
-    #     if id != customer.id:
-    #         return False
-    #     if not self.address_repository.update(customer.address.id, customer.address):
-    #         return False
-    #     with psycopg.connect(self.conn_string) as db:
-    #         db.execute('UPDATE CUSTOMER SET FIRST_NAME=?, LAST_NAME=?, ADDRESS_ID=?, EMAIL_ADDRESS=? \
-    #             WHERE ID=?;', [customer.first_name, customer.last_name, customer.address.id, customer.email_address, id])
-
-    # def delete(self, id):
-    #     customer = self.get_by_id(id)
-    #     if not self.address_repository.delete(customer.address.id):
-    #         return False
-    #     with psycopg.connect(self.conn_string) as db:
-    #         db.execute('DELETE FROM CUSTOMER WHERE ID=?;', [id])
+    def delete(self, id) -> None:
+        with psycopg2.connect(self.conn_string) as db:
+            with db.cursor() as cursor:
+                cursor.execute("""
+                    DELETE FROM customer WHERE ID=%(customer_id)s
+                    """, {
+                        'customer_id': id              
+                    }
+                )
