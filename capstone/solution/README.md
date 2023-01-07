@@ -1,0 +1,1 @@
+docker run --name capstone-postgres -e POSTGRES_PASSWORD=<your password here> -p 5432:5432 -d postgres
