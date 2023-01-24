@@ -1,0 +1,15 @@
+# Restarting docker container for postgres
+docker ps -a
+docker start <container id>
+# If error on psql login, run sudo kill -9 $(sudo lsof -t -i:5432) - if prompted for password, it's "password"
+
+# Use https://github.com/KernelGamut32/capital_group_edge_la_public/tree/main/labs/week02/unittest-python-mocking/solution as an example
+# Set dependencies in requirements.txt
+# Use https://realpython.com/prevent-python-sql-injection/ for example of using psycopg2 (for Postgres access)
+# From root of project, run
+python -m venv venv # Creates a virtual environment
+source venv/bin/activate
+pip install -r requirements.txt # Install all dependencies
+# If pip install throws exception, use psycopg2-binary instead
+# To get the application to work (if you follow the lab solution as a template), run
+python app.py
