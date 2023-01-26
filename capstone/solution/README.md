@@ -3,7 +3,7 @@ This runs the postgres database locally (for testing before moving to ec2)
 `docker run --name postgres -e POSTGRES_PASSWORD=<your password here> -p 5432:5432 -d postgres`
 
 
-##EC2 migration
+## EC2 migration
 
 This creates the Docker image for your python application - you can run this in EC2 if you have your source code present otherwise run it locally:
 
